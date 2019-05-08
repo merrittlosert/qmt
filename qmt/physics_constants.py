@@ -1,6 +1,9 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
+"""Physical constants and units."""
+
+
 import sympy.physics.units as spu
 from scipy import constants as sc
 from sympy.matrices import eye
@@ -36,17 +39,17 @@ units = SimpleNamespace(
 
 
 def parse_unit(s):
-    """convert name of a unit into the corresponding sympy value
+    """Convert name of a unit into the corresponding sympy value.
 
     Parameters
     ----------
-    s :
+    s : String to convert
 
 
     Returns
     -------
-
-
+    unit
+        Sympy unit
     """
     for u in dir(units):
         if u[:2] == "__":
@@ -57,7 +60,7 @@ def parse_unit(s):
     # through
     if hasattr(s, "subs"):
         return s
-    raise RuntimeError("unknown unit: {}".format(s))
+    raise RuntimeError(f"unknown unit: {s}")
 
 
 constants = SimpleNamespace(
@@ -75,19 +78,19 @@ constants = SimpleNamespace(
 if "convert_to" in dir(spu):
 
     def canonicalize(expr, base=None):
-        """Convert all units to given base units (default: SI base units)
+        """Convert all units to given base units (default: SI base units).
 
         Parameters
         ----------
         expr :
-
+            Expression to canoncalize
         base :
             (Default value = None)
-
+            Base units to convert to
         Returns
         -------
-
-
+        unit
+            Expression in base units
         """
         if base is None:
             base = (spu.m, spu.kg, spu.s, spu.A, spu.K, spu.mol, spu.cd)
@@ -101,34 +104,31 @@ else:
 
 
 def cancel(expr):
-    """Cancel different units referring to the same dimension, e.g. cancel(kg/g) -> 1000
+    """Cancel different units referring to the same dimension, e.g. cancel(kg/g) -> 1000.
 
     Parameters
     ----------
     expr :
-
-
+        Expression to cancel
     Returns
     -------
-
-
+    float
+        Expression after units are canceled
     """
     return canonicalize(expr, 1)
 
 
 def to_float(expr):
-    """Convert sympy expression involving units to a float. Fails if expr is not
-    dimensionless.
+    """Convert sympy expression involving units to a float. Fails if expr is not dimensionless.
 
     Parameters
     ----------
     expr :
-
-
+        Sympy expression to convert
     Returns
     -------
-
-
+    float:
+        Value of dimensionless expression
     """
     return float(cancel(expr))
 
@@ -157,7 +157,8 @@ matrices.tau_zz = kron(matrices.s_z, matrices.s_z)
 
 
 class UArray(np.ndarray):
-    """Extend a numpy array to have units information from sympy
+    """Extend a numpy array to have units information from sympy.
+
     From https://docs.scipy.org/doc/numpy/user/basics.subclassing.html#simple-example-adding-an-extra-attribute-to-ndarray
 
     Pickle stuff copied from https://stackoverflow.com/questions/26598109/preserve-custom-attributes-when-pickling-subclass-of-numpy-array

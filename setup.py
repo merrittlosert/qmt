@@ -1,6 +1,7 @@
-#!/usr/bin/env python
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
+
+"""Qubit Modeling Tools (QMT) for computational modeling of quantum devices."""
 
 from setuptools import setup
 import sys
@@ -11,8 +12,8 @@ if sys.version_info < (3, 6):
     sys.exit(1)
 
 
-# Loads _version.py module without importing the whole package.
 def get_version_and_cmdclass(package_name):
+    """Load _version.py module without importing the whole package."""
     import os
     from importlib.util import module_from_spec, spec_from_file_location
 
